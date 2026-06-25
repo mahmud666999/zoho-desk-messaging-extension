@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Zoho Desk - Apps</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Syne:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Syne', sans-serif;
+      background: #f5f4f0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .card {
+      background: #fff;
+      border: 1.5px solid #e0ded8;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 520px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+      overflow: hidden;
+    }
+
+    .card-header {
+      background: #1a1a2e;
+      padding: 18px 22px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-header .dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: #e8d5a3;
+    }
+
+    .card-header h2 {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      font-weight: 500;
+      color: #a0a8c0;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .card-body {
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #888;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      border: 1.5px solid #e0ded8;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      color: #1a1a2e;
+      background: #faf9f6;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input[type="text"]:focus {
+      border-color: #1a1a2e;
+      box-shadow: 0 0 0 3px rgba(26,26,46,0.07);
+    }
+
+    input[type="text"]::placeholder { color: #bbb; }
+
+    .merge-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    select {
+      flex: 1;
+      border: 1.5px solid #e0ded8;
+      border-radius: 10px;
+      padding: 9px 32px 9px 12px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: #1a1a2e;
+      background: #faf9f6;
+      outline: none;
+      cursor: pointer;
+      transition: border-color 0.2s;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+    }
+
+    select:focus {
+      border-color: #1a1a2e;
+      box-shadow: 0 0 0 3px rgba(26,26,46,0.07);
+    }
+
+    .btn-insert {
+      white-space: nowrap;
+      background: #f5f4f0;
+      color: #1a1a2e;
+      border: 1.5px solid #e0ded8;
+      border-radius: 8px;
+      padding: 9px 14px;
+      font-family: 'Syne', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-insert:hover { background: #ece9e3; border-color: #ccc; }
+    .btn-insert:active { transform: scale(0.97); }
+    .btn-insert:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      resize: vertical;
+      border: 1.5px solid #e0ded8;
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      color: #1a1a2e;
+      background: #faf9f6;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      line-height: 1.6;
+    }
+
+    textarea:focus {
+      border-color: #1a1a2e;
+      box-shadow: 0 0 0 3px rgba(26,26,46,0.07);
+    }
+
+    textarea::placeholder { color: #bbb; }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .char-count {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: #bbb;
+    }
+
+    .btn-send {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #1a1a2e;
+      color: #e8d5a3;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-family: 'Syne', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: background 0.18s, transform 0.12s;
+    }
+
+    .btn-send:hover { background: #2d2d4a; }
+    .btn-send:active { transform: scale(0.97); }
+    .btn-send:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+    .btn-send svg { flex-shrink: 0; }
+
+    .divider {
+      height: 1px;
+      background: #f0ede8;
+      margin: 0 -22px;
+    }
+
+    .status-bar {
+      height: 36px;
+      display: flex;
+      align-items: center;
+      padding: 0 22px;
+      background: #faf9f6;
+      border-top: 1px solid #e0ded8;
+    }
+
+    .status-msg {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      transition: opacity 0.3s;
+    }
+
+    .status-msg.success { color: #2d7d46; }
+    .status-msg.error   { color: #c0392b; }
+    .status-msg.info    { color: #1a6ea8; }
+    .status-msg.idle    { color: transparent; }
+  </style>
+</head>
+
+<body>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="dot"></div>
+      <h2>Send SMS</h2>
+    </div>
+
+    <div class="card-body">
+
+      <!-- Phone number field -->
+      <div class="field-group">
+        <div class="label">Send To</div>
+        <input type="text" id="sent_to" placeholder="Loading…" />
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Merge field -->
+      <div class="field-group">
+        <div class="label">Merge Field</div>
+        <div class="merge-row">
+          <select id="mergeDropdown">
+            <option value="ticket.id">Ticket.Id</option>
+            <option value="ticket.number">Ticket.Number</option>
+            <option value="ticket.phone">Ticket.Phone</option>
+            <option value="ticket.status">Ticket.Status</option>
+            <option value="ticket.subject">Ticket.Subject</option>
+            <option value="ticket.description">Ticket.Description</option>
+            <option value="contact.phone">Contact.Phone</option>
+            <option value="contact.mobile">Contact.Mobile</option>
+            <option value="contact.firstName">Contact.FirstName</option>
+            <option value="contact.lastName">Contact.LastName</option>
+            <option value="contact.email">Contact.Email</option>
+            <option value="contact.address">Contact.Address</option>
+            <option value="account.name">Account.Name</option>
+          </select>
+          <button class="btn-insert" id="insertMergeBtn">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            Insert
+          </button>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Message textarea -->
+      <div class="field-group">
+        <div class="label">Message</div>
+        <textarea id="replyMessage" placeholder="Type your message here…" maxlength="5000"></textarea>
+      </div>
+
+      <div class="actions">
+        <span class="char-count"><span id="charCount">0</span> / 5000</span>
+        <button class="btn-send" id="sendBtn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+          Send Reply
+        </button>
+      </div>
+
+    </div>
+
+    <div class="status-bar">
+      <span class="status-msg idle" id="statusMsg">—</span>
+    </div>
+  </div>
+
+  <script src="https://static.zohocdn.com/zohodeskmarketplacesdkstatic/developer_sdk/v1/js/ZohoDeskClientSDK.min.js"></script>
+  <script>
+    const textarea       = document.getElementById('replyMessage');
+    const sendBtn        = document.getElementById('sendBtn');
+    const charCount      = document.getElementById('charCount');
+    const statusMsg      = document.getElementById('statusMsg');
+    const sentToInput    = document.getElementById('sent_to');
+    const mergeDropdown  = document.getElementById('mergeDropdown');
+    const insertMergeBtn = document.getElementById('insertMergeBtn');
+
+    // Character counter & button state
+    textarea.addEventListener('input', function () {
+      const len = textarea.value.length;
+      charCount.textContent = len;
+      sendBtn.disabled = len === 0;
+    });
+
+    // Status helper
+    function showStatus(type, text) {
+      statusMsg.className = 'status-msg ' + type;
+      statusMsg.textContent = text;
+      if (type !== 'idle') {
+        setTimeout(function () { showStatus('idle', '—'); }, 3500);
+      }
+    }
+
+    // Append merge field value to end of textarea
+    function appendToTextarea(value) {
+      textarea.value = textarea.value + value;
+      textarea.dispatchEvent(new Event('input')); // update char count + button
+      textarea.focus();
+    }
+
+    window.onload = function () {
+      ZOHODESK.extension.onload().then(function (App) {
+
+ // Pre-fill phone: ticket.phone first, fall back to contact.phone
+ZOHODESK.get('ticket.phone').then(function (res) {
+  var phone = res['ticket.phone'];
+  if (phone) {
+    sentToInput.value = phone;
+    sentToInput.placeholder = '';
+  } else {
+    return ZOHODESK.get('contact.phone').then(function (r) {
+      sentToInput.value = r['contact.phone'] || '';
+      sentToInput.placeholder = 'Enter phone number';
+    });
+  }
+})
+        // Merge field: fetch from Zoho and append to textarea
+        insertMergeBtn.addEventListener('click', function () {
+          var selectedField = mergeDropdown.value;
+
+          insertMergeBtn.disabled = true;
+
+          ZOHODESK.get(selectedField).then(function (res) {
+            var value = res[selectedField];
+            if (value !== undefined && value !== null && value !== '') {
+              appendToTextarea(String(value));
+              showStatus('info', '✦ ' + selectedField + ' inserted');
+            } else {
+              showStatus('error', '✗ No value for ' + selectedField);
+            }
+          }).catch(function (err) {
+            showStatus('error', '✗ Could not fetch ' + selectedField);
+            console.error(err);
+          }).finally(function () {
+            insertMergeBtn.disabled = false;
+          });
+        });
+
+        // Send button
+        sendBtn.addEventListener('click', function () {
+          var content = textarea.value.trim();
+          if (!content) return;
+
+          sendBtn.disabled = true;
+          sendBtn.textContent = 'Sending…';
+
+          ZOHODESK.invoke('Insert', 'ticket.replyEditor', {
+            content: '<p>' + content.replace(/\n/g, '<br>') + '</p>'
+          }).then(function () {
+            showStatus('success', '✓ Reply inserted into editor');
+            textarea.value = '';
+            charCount.textContent = '0';
+          }).catch(function (err) {
+            showStatus('error', '✗ Failed to insert reply');
+            console.error(err);
+          }).finally(function () {
+            sendBtn.disabled = false;
+            sendBtn.innerHTML = [
+              '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">',
+              '<line x1="22" y1="2" x2="11" y2="13"></line>',
+              '<polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>',
+              '</svg> Send Reply'
+            ].join('');
+          });
+        });
+
+      });
+    };
+  </script>
+
+  <script src="./js/extension.js" charset="utf-8"></script>
+
+</body>
+</html>

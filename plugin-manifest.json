@@ -1,0 +1,1 @@
+{"connectors":[],"zohoAuthorisation":{},"whiteListedDomains":[],"moduleSupport":false,"service":"DESK","cspDomains":{"connect-src":[]},"storage":false,"locale":["en"],"type":"personal","config":[],"modules":{"widgets":[{"name":"Desk Extension","icon":"/app/img/icon.png","logo":"/app/img/logo.png","location":"desk.ticket.detail.rightpanel","url":"/app/widget.html"}],"events":[]}}
